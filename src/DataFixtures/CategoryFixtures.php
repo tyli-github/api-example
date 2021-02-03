@@ -8,11 +8,16 @@ use Doctrine\Persistence\ObjectManager;
 
 class CategoryFixtures extends Fixture
 {
+    public const REF_ADVENTURE = 'adventure';
+    public const REF_SCIFI = 'scifi';
+
     public function load(ObjectManager $manager)
     {
-        foreach ($this->getNames() as $name) {
+        foreach ($this->getNames() as $reference => $name) {
             $category = new Category();
-            $category->setName('Sci-Fi');
+            $category->setName($name);
+
+            $this->addReference($reference, $category);
 
             $manager->persist($category);
         }
@@ -26,8 +31,8 @@ class CategoryFixtures extends Fixture
     private function getNames(): array
     {
         return [
-            'Adventure',
-            'Sci-Fi',
+            self::REF_ADVENTURE => 'Adventure',
+            self::REF_SCIFI => 'Sci-Fi',
         ];
     }
 }
