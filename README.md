@@ -19,3 +19,7 @@ composer install
 ```
 symfony server:start
 ```
+
+Go to the index page and test api endpoints.
+
+You could also use a tool like https://insomnia.rest/.
