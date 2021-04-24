@@ -6,11 +6,16 @@ Example project using Symfony and API Platform.
 - [Symfony CLI](https://symfony.com/download)
 - [Composer](https://getcomposer.org/)
 
-## Usage
+## Installation
 Run the following after checking out project: 
 ```
 composer install
 ./bin/console doctrine:database:create
 ./bin/console doctrine:migrations:migrate
 ./bin/console doctrine:fixtures:load
+```
+
+## Usage
+```
+symfony server:start
 ```
