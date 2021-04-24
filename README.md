@@ -23,3 +23,9 @@ symfony server:start
 Go to the index page and test api endpoints.
 
 You could also use a tool like https://insomnia.rest/.
+
+## Tests
+The following command runs the Codeception suite: (only unit test for now)
+```
+./vendor/bin/codecept run
+```
