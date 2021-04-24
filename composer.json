@@ -72,11 +72,12 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "5.2.*"
         }
     },
     "require-dev": {
+        "codeception/codeception": "^4.1",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "symfony/stopwatch": "^5.2",
         "symfony/web-profiler-bundle": "^5.2"
