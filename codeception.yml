@@ -11,3 +11,15 @@ extensions:
         - Codeception\Extension\RunFailed
 params:
     - .env
+coverage:
+    enabled: true
+    remote: false
+    whitelist:
+        include:
+            - src/*.php
+        exclude:
+            - src/DataFixtures/*
+            - src/Entity/*
+            - src/Repository/*
+            - src/Kernel.php
+            - vendor/*
