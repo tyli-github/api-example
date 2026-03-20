@@ -12,12 +12,12 @@ use Doctrine\Persistence\ObjectManager;
 
 class MovieFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         foreach ($this->getMovieData() as $categoryRef => $movieNames) {
             foreach ($movieNames as $movieName) {
                 /** @var Category $category */
-                $category = $this->getReference($categoryRef);
+                $category = $this->getReference($categoryRef, Category::class);
 
                 $movie = new Movie();
                 $movie->setName($movieName);
@@ -38,6 +38,9 @@ class MovieFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
+    /**
+     * @return array<string, array>
+     */
     private function getMovieData(): array
     {
         return [

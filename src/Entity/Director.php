@@ -4,45 +4,29 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ApiResource(
- *     collectionOperations={
- *          "get"={
- *              "method"="GET",
- *              "path"="/director"
- *          }
- *     },
- *     itemOperations={
- *          "get" = {
- *              "method"="GET",
- *              "path"="/director/{id}"
- *          }
- *     }
- * )
- */
+#[ORM\Entity]
+#[ApiResource]
 class Director
 {
-    /**
-     * @var string
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $name = null;
 
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(string $id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
-
         return $this;
     }
 
@@ -54,7 +38,6 @@ class Director
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 }

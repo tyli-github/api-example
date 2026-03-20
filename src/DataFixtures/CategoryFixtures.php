@@ -10,10 +10,10 @@ use Doctrine\Persistence\ObjectManager;
 
 class CategoryFixtures extends Fixture
 {
-    public const REF_ADVENTURE = 'adventure';
-    public const REF_SCIFI = 'scifi';
+    public const string REF_ADVENTURE = 'adventure';
+    public const string REF_SCIFI = 'scifi';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         foreach ($this->getNames() as $reference => $name) {
             $category = new Category();

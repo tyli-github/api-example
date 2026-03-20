@@ -4,60 +4,68 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\DataProvider;
 
-use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
+use ApiPlatform\Metadata\Operation;
 use App\DataProvider\DirectorDataProvider;
 use App\Entity\Director;
 use Codeception\Test\Unit;
-use stdClass;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class DirectorDataProviderTest extends Unit
 {
-    /**
-     * @dataProvider supportsProvider
-     */
-    public function testSupports(string $class, bool $expected)
-    {
-        $dataProvider = new DirectorDataProvider();
+    private DirectorDataProvider $dataProvider;
 
-        $this->assertSame($expected, $dataProvider->supports($class));
+    protected function _before()
+    {
+        $this->dataProvider = new DirectorDataProvider();
     }
 
-    public function supportsProvider(): iterable
+    public function testProvideCollectionForDirector()
     {
-        yield 'Director entity supported' => [Director::class, true];
-        yield 'stdClass not supported' => [stdClass::class, false];
+        $operation = $this->createMockOperation(Director::class);
+
+        $result = $this->dataProvider->provide($operation, []);
+
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
+        $this->assertInstanceOf(Director::class, $result[0]);
+        $this->assertSame('Steven Spielberg', $result[0]->getName());
+        $this->assertSame('Jon Favreau', $result[1]->getName());
     }
 
-    public function testGetCollection()
+    public function testProvideItemForDirector()
     {
-        $dataProvider = new DirectorDataProvider();
-        $data = $dataProvider->getCollection('not_used');
+        $operation = $this->createMockOperation(Director::class);
 
-        $this->assertCount(2, $data);
-        $this->assertInstanceOf(Director::class, current($data));
+        $result = $this->dataProvider->provide($operation, ['id' => 1]);
+
+        $this->assertInstanceOf(Director::class, $result);
+        $this->assertSame(1, $result->getId());
+        $this->assertSame('Steven Spielberg', $result->getName());
     }
 
-    /**
-     * @param string $id
-     * @param string|null $class
-     * @throws ResourceClassNotSupportedException
-     * @dataProvider itemProvider
-     */
-    public function testGetItem(string $id, ?string $class)
+    public function testProvideItemNotFound()
     {
-        $dataProvider = new DirectorDataProvider();
+        $operation = $this->createMockOperation(Director::class);
 
-        if ($class === null) {
-            $this->assertNull($dataProvider->getItem('not_used', $id));
-        } else {
-            $this->assertInstanceOf($class, $dataProvider->getItem('not_used', $id));
-        }
+        $result = $this->dataProvider->provide($operation, ['id' => 999]);
+
+        $this->assertNull($result);
     }
 
-    public function itemProvider(): iterable
+    public function testProvideIgnoresNonDirectorClass()
     {
-        yield 'director id `abc123` exist' => ['abc123', Director::class];
-        yield 'director id `def456` exist' => ['def456', Director::class];
-        yield 'director id `xxx` does not exist' => ['xxx', null];
+        $operation = $this->createMockOperation('stdClass');
+
+        $result = $this->dataProvider->provide($operation, []);
+
+        $this->assertNull($result);
+    }
+
+    private function createMockOperation(string $class): MockObject
+    {
+        $operation = $this->createMock(Operation::class);
+        $operation->method('getClass')->willReturn($class);
+
+        return $operation;
     }
 }

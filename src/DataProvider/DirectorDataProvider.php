@@ -4,38 +4,44 @@ declare(strict_types=1);
 
 namespace App\DataProvider;
 
-use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
-use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
-use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
 use App\Entity\Director;
 
 /**
- * Simple data provider as example other than Doctrine ORM.
- * Third party API can be used here for example.
+ * State provider as example for in-memory data.
+ * Third party APIs can be used here as well.
  */
-class DirectorDataProvider implements ContextAwareCollectionDataProviderInterface, ItemDataProviderInterface, RestrictedDataProviderInterface
+class DirectorDataProvider implements ProviderInterface
 {
-    public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        return Director::class === $resourceClass;
+        if (!is_a($operation->getClass(), Director::class, true)) {
+            return null;
+        }
+
+        // Item operation (single director)
+        if (isset($uriVariables['id'])) {
+            return $this->getItem((int) $uriVariables['id']);
+        }
+
+        // Collection operation
+        return $this->getCollection();
     }
 
-    public function getCollection(string $resourceClass, string $operationName = null, array $context = [])
+    private function getCollection(): array
     {
         return $this->getDirectors();
     }
 
-    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
+    private function getItem(int $id): ?Director
     {
-        $director = array_filter($this->getDirectors(), function (Director $director) use ($id) {
-            return $director->getId() === $id;
-        });
+        $directors = array_filter(
+            $this->getDirectors(),
+            fn(Director $director) => $director->getId() === $id
+        );
 
-        if (count($director) !== 1) {
-            return null;
-        }
-
-        return current($director);
+        return count($directors) === 1 ? current($directors) : null;
     }
 
     /**
@@ -44,8 +50,8 @@ class DirectorDataProvider implements ContextAwareCollectionDataProviderInterfac
     private function getDirectors(): array
     {
         return [
-            (new Director())->setId('abc123')->setName('Steven Spielberg'),
-            (new Director())->setId('def456')->setName('Jon Favreau'),
+            new Director()->setId(1)->setName('Steven Spielberg'),
+            new Director()->setId(2)->setName('Jon Favreau'),
         ];
     }
 }

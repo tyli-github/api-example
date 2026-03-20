@@ -1,31 +1,22 @@
 # api-example
 
-Example project using Symfony and API Platform.
+Example API project using Symfony 7.4 LTS and API Platform 4.3.
 
 ## Requirements
-- [Symfony CLI](https://symfony.com/download)
+- PHP 8.4+
 - [Composer](https://getcomposer.org/)
 
-## Installation
-Run the following after checking out project: 
-```
+## Quick Start
+```bash
 composer install
-./bin/console doctrine:database:create
 ./bin/console doctrine:migrations:migrate
 ./bin/console doctrine:fixtures:load
-```
-
-## Usage
-```
 symfony server:start
 ```
 
-Go to the index page and test api endpoints.
-
-You could also use a tool like https://insomnia.rest/.
+Access the API at `http://localhost:8000/api`
 
 ## Tests
-The following command runs the Codeception suite: (only unit test for now)
-```
+```bash
 ./vendor/bin/codecept run
 ```

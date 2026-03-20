@@ -4,50 +4,27 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ApiResource(
- *     collectionOperations={
- *          "category_get"={
- *              "method"="GET",
- *              "path"="/movie"
- *          }
- *     },
- *     itemOperations={
- *          "get" = {
- *              "method"="GET",
- *              "path"="/movie/{id}"
- *          }
- *     }
- * )
- * @ORM\Entity(repositoryClass=MovieRepository::class)
- */
+#[ORM\Entity(repositoryClass: MovieRepository::class)]
+#[ApiResource]
 class Movie
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $name = null;
 
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private $year;
+    #[ORM\Column(type: 'smallint')]
+    private ?int $year = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="movies")
-     */
-    private $category;
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'movies')]
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
@@ -62,7 +39,6 @@ class Movie
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -74,7 +50,6 @@ class Movie
     public function setYear(int $year): self
     {
         $this->year = $year;
-
         return $this;
     }
 
@@ -86,7 +61,6 @@ class Movie
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
-
         return $this;
     }
 }
