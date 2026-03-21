@@ -9,9 +9,11 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\DataProvider\DirectorDataProvider;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
+    description: 'Director resource',
     operations: [
         new GetCollection(provider: DirectorDataProvider::class),
         new Get(provider: DirectorDataProvider::class),
@@ -25,6 +27,8 @@ class Director
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $name = null;
 
     public function getId(): ?int
