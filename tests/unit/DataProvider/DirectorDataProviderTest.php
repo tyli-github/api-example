@@ -14,13 +14,14 @@ class DirectorDataProviderTest extends Unit
 {
     private DirectorDataProvider $dataProvider;
 
-    protected function _before()
+    protected function _before(): void
     {
         $this->dataProvider = new DirectorDataProvider();
     }
 
     public function testProvideCollectionForDirector()
     {
+        /** @var Operation $operation */
         $operation = $this->createMockOperation(Director::class);
 
         $result = $this->dataProvider->provide($operation, []);
@@ -34,6 +35,7 @@ class DirectorDataProviderTest extends Unit
 
     public function testProvideItemForDirector()
     {
+        /** @var Operation $operation */
         $operation = $this->createMockOperation(Director::class);
 
         $result = $this->dataProvider->provide($operation, ['id' => 1]);
@@ -45,6 +47,7 @@ class DirectorDataProviderTest extends Unit
 
     public function testProvideItemNotFound()
     {
+        /** @var Operation $operation */
         $operation = $this->createMockOperation(Director::class);
 
         $result = $this->dataProvider->provide($operation, ['id' => 999]);
@@ -54,6 +57,7 @@ class DirectorDataProviderTest extends Unit
 
     public function testProvideIgnoresNonDirectorClass()
     {
+        /** @var Operation $operation */
         $operation = $this->createMockOperation('stdClass');
 
         $result = $this->dataProvider->provide($operation, []);

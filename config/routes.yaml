@@ -1,6 +1,5 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+api_platform:
+  resource: ./routes/api_platform.yaml
 
-controllers:
-  resource: routing.controllers
+framework:
+  resource: ./routes/framework.yaml

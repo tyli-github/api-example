@@ -5,10 +5,18 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\DataProvider\DirectorDataProvider;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(provider: DirectorDataProvider::class),
+        new Get(provider: DirectorDataProvider::class),
+    ]
+)]
 class Director
 {
     #[ORM\Id]
