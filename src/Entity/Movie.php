@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -16,17 +19,28 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'name' => 'partial',
+    'year' => 'exact',
+    'category' => 'exact',
+])]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id',
+    'name',
+    'year',
+    'category'
+])]
 #[ApiResource(
     description: 'Movie resource',
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
     operations: [
         new GetCollection(),
         new Post(),
         new Get(),
         new Put(),
         new Delete(),
-    ]
+    ],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']]
 )]
 class Movie
 {

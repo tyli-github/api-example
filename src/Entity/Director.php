@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 #[ApiResource(
     description: 'Director resource',
+    paginationEnabled: false,
     operations: [
         new GetCollection(provider: DirectorDataProvider::class),
         new Get(provider: DirectorDataProvider::class),
