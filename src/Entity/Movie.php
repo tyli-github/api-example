@@ -62,7 +62,15 @@ class Movie
     #[Assert\Range(min: 1800, max: 2100)]
     private ?int $year = null;
 
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'movies', fetch: 'LAZY')]
+    /**
+     * Category this movie belongs to (owning side of the relationship).
+     * Uses lazy loading to avoid N+1 queries when not needed.
+     * Intentionally not tagged with #[Groups()] to prevent serialization recursion.
+     * When accessed via API, the full Category object is included in the response.
+     *
+     * @see Category::$movies (inverse side)
+     */
+    #[ORM\ManyToOne(targetEntity: Category::class, fetch: 'LAZY', inversedBy: 'movies')]
     private ?Category $category = null;
 
     public function getId(): ?int

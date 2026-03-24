@@ -21,15 +21,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource(
     description: 'Category resource',
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
     operations: [
         new GetCollection(),
         new Post(),
         new Get(),
         new Put(),
         new Delete(),
-    ]
+    ],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']]
 )]
 class Category
 {
@@ -46,6 +46,15 @@ class Category
     #[Assert\Length(min: 2, max: 255)]
     private ?string $name = null;
 
+    /**
+     * All movies in this category (inverse side of the relationship).
+     * Uses lazy loading: collection only loads when accessed.
+     * Managed by Movie::$category (owning side) — assign movies via Movie->setCategory($category).
+     * Intentionally not tagged with #[Groups()] to prevent serialization recursion.
+     * When accessed via API GET /categories/{id}, the movies collection is included.
+     *
+     * @see Movie::$category (owning side)
+     */
     #[ORM\OneToMany(targetEntity: Movie::class, mappedBy: 'category', fetch: 'LAZY')]
     private Collection $movies;
 
