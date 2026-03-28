@@ -23,5 +23,12 @@ Access the API at `http://localhost:8000/api`
 
 ## Tests
 ```bash
+# First-time setup (creates SQLite test DB)
+APP_ENV=test php bin/console doctrine:schema:create
+
+# Run all tests
 ./vendor/bin/codecept run
+
+# Run only functional tests
+./vendor/bin/codecept run functional
 ```

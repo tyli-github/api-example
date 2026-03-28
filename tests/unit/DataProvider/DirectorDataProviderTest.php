@@ -16,6 +16,8 @@ class DirectorDataProviderTest extends Unit
 
     protected function _before(): void
     {
+        DirectorDataProvider::reset();
+
         $this->dataProvider = new DirectorDataProvider();
     }
 

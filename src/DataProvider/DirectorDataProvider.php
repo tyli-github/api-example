@@ -15,6 +15,7 @@ use App\Entity\Director;
 class DirectorDataProvider implements ProviderInterface
 {
     private static array $directors = [];
+
     private static bool $initialized = false;
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
@@ -23,26 +24,20 @@ class DirectorDataProvider implements ProviderInterface
             return null;
         }
 
-        $this->initializeStorage();
+        $this->initialize();
 
-        // Item operation (single director)
         if (isset($uriVariables['id'])) {
-            return $this->getItem((int)$uriVariables['id']);
+            $id = (int)$uriVariables['id'];
+
+            return array_find(self::$directors, fn($director) => $director->getId() === $id);
         }
 
-        // Collection operation
-        return $this->getCollection();
+        return self::$directors;
     }
 
     public static function getDirectors(): array
     {
-        if (!self::$initialized) {
-            self::$directors = [
-                new Director()->setId(1)->setName('Steven Spielberg'),
-                new Director()->setId(2)->setName('Jon Favreau'),
-            ];
-            self::$initialized = true;
-        }
+        self::initialize();
 
         return self::$directors;
     }
@@ -52,7 +47,13 @@ class DirectorDataProvider implements ProviderInterface
         self::$directors = $directors;
     }
 
-    private function initializeStorage(): void
+    public static function reset(): void
+    {
+        self::$directors = [];
+        self::$initialized = false;
+    }
+
+    private static function initialize(): void
     {
         if (!self::$initialized) {
             self::$directors = [
@@ -61,20 +62,5 @@ class DirectorDataProvider implements ProviderInterface
             ];
             self::$initialized = true;
         }
-    }
-
-    private function getCollection(): array
-    {
-        return self::$directors;
-    }
-
-    private function getItem(int $id): ?Director
-    {
-        $directors = array_filter(
-            self::$directors,
-            fn(Director $director) => $director->getId() === $id
-        );
-
-        return count($directors) === 1 ? current($directors) : null;
     }
 }

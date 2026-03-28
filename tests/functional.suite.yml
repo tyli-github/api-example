@@ -11,7 +11,10 @@ modules:
         - Symfony:
             kernel_class: 'App\Kernel'
             environment: 'test'
-#        - Doctrine2:
-#            depends: Symfony
-#            cleanup: true
+        - REST:
+            depends: Symfony
+            url: /
+        - Doctrine:
+            depends: Symfony
+            cleanup: true
         - \App\Tests\Helper\Functional

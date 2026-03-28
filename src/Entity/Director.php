@@ -27,9 +27,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(provider: DirectorDataProvider::class),
         new Post(processor: DirectorDataProcessor::class),
         new Get(provider: DirectorDataProvider::class),
-        new Put(processor: DirectorDataProcessor::class),
-        new Patch(processor: DirectorDataProcessor::class),
-        new Delete(processor: DirectorDataProcessor::class),
+        new Put(provider: DirectorDataProvider::class, processor: DirectorDataProcessor::class),
+        new Patch(provider: DirectorDataProvider::class, processor: DirectorDataProcessor::class),
+        new Delete(provider: DirectorDataProvider::class, processor: DirectorDataProcessor::class),
     ]
 )]
 class Director
