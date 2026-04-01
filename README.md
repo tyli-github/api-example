@@ -7,14 +7,36 @@ Example API project using Symfony 7.4 LTS and API Platform 4.3.
 - [Composer](https://getcomposer.org/)
 
 ## Quick Start
+
+1. Install dependencies:
 ```bash
 composer install
+```
+
+2. Create `.env.local` with local overrides:
+```bash
+# Generate a random APP_SECRET
+APP_SECRET=$(php -r "echo bin2hex(random_bytes(32));")
+
+# Create .env.local
+cat > .env.local <<EOF
+APP_SECRET=$APP_SECRET
+DATABASE_URL="sqlite:///%kernel.project_dir%/var/movies.db"
+EOF
+```
+
+3. Setup database and load fixtures:
+```bash
 ./bin/console doctrine:migrations:migrate
 ./bin/console doctrine:fixtures:load
+```
+
+4. Start the dev server:
+```bash
 symfony server:start
 ```
 
-Access the API at `http://localhost:8000/api`
+Access the API at `https://127.0.0.1:8000`
 
 ## Data Persistence Notes
 

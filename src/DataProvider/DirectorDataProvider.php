@@ -9,8 +9,9 @@ use ApiPlatform\State\ProviderInterface;
 use App\Entity\Director;
 
 /**
- * State provider for in-memory director data with static storage.
- * Provides read operations (GetCollection, Get).
+ * State Provider for in-memory Director data (static storage).
+ * Must be set on all READ operations, or API Platform falls back to Doctrine and then 404.
+ * @see DirectorDataProcessor
  */
 class DirectorDataProvider implements ProviderInterface
 {
@@ -24,11 +25,11 @@ class DirectorDataProvider implements ProviderInterface
             return null;
         }
 
+        // Lazy-load static data on first access
         $this->initialize();
 
         if (isset($uriVariables['id'])) {
             $id = (int)$uriVariables['id'];
-
             return array_find(self::$directors, fn($director) => $director->getId() === $id);
         }
 
@@ -56,6 +57,7 @@ class DirectorDataProvider implements ProviderInterface
     private static function initialize(): void
     {
         if (!self::$initialized) {
+            // Hardcoded sample data
             self::$directors = [
                 new Director()->setId(1)->setName('Steven Spielberg'),
                 new Director()->setId(2)->setName('Jon Favreau'),

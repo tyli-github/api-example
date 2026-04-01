@@ -11,6 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 class CategoryFixtures extends Fixture
 {
     public const string REF_ADVENTURE = 'adventure';
+
     public const string REF_SCIFI = 'scifi';
 
     public function load(ObjectManager $manager): void
